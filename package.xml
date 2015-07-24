@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+	
+	<name>respec</name>
+	<version>0.1.0</version>
+	<description>
+		A Python framework for generating Linear Temporal Logic formulas for Robotics applications
+	</description>
+	
+	<author email="sm2296@cornell.edu">Spyros Maniatopoulos</author>
+	
+	<maintainer email="sm2296@cornell.edu">Spyros Maniatopoulos</maintainer>
+	
+	<license>BSD</license>
+	
+	<buildtool_depend>catkin</buildtool_depend>
+
+</package>
