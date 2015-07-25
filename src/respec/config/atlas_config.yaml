@@ -1,0 +1,47 @@
+# Control Mode transition system
+transition_system:
+    stand_prep:
+        - stand_prep
+        - stand
+    stand:
+        - stand
+        - manipulate
+        - step
+        - walk
+    manipulate:
+        - manipulate
+        - stand
+    step:
+        - step
+        - stand
+    walk:
+        - walk
+        - stand
+
+# Action Pre-conditions (ATLAS and ViGIR software specific)
+action_preconditions:
+    pickup_object:
+        - object_template
+        - manipulate
+    grasp_object:
+        - object_template
+        - manipulate
+    pregrasp:
+        - pregrasp_plan
+        - manipulate
+    pregrasp_plan:
+        - pregrasp_pose
+    pregrasp_pose:
+        - object_template
+    approach_object:
+        - object_template
+        - stand
+    object_template: []
+    footstep_execution:
+        - footstep_plan
+        - stand
+    footstep_plan:
+        - footstep_goal
+    footstep_goal:
+        - target_pose
+    target_pose: []
