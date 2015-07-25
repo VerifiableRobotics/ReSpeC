@@ -31,7 +31,8 @@ class ICSpecificationTests(unittest.TestCase):
         other_spec.handle_new_action(action = 'bar')
 
         true_props = ['foo']
-        expected_sys_init = ['foo_a', '! bar_a']
+        # expected_sys_init = ['foo_a', '! bar_a']
+        expected_sys_init = ['! foo_a', '! bar_a'] # based on new IC paradigm
         expected_env_init = ['foo_c', '! bar_c']
 
         self.spec.set_ics_from_spec(other_spec, true_props)

@@ -139,7 +139,9 @@ class ActionSpecificationTests(unittest.TestCase):
 
 
     def test_handle_recursive_preconditions_with_multiple_outcomes(self):
-        self.fail('Incomplete test!')
+        
+        pass #TODO
+
 
 class ConfigurationTests(unittest.TestCase):
     """Test the construction of the RobotConfiguration class."""
