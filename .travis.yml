@@ -1,0 +1,16 @@
+language: python
+python:
+    - "2.7"
+
+# Install packages
+install:
+  # nose is pre-installed on Travis CI
+  - pip install nose-cov
+  - pip install rednose
+  - pip install coveralls
+
+# Run tests
+script:
+  - nosetests -v --rednose test
+# after_success:
+#   - coveralls
