@@ -11,6 +11,7 @@ install:
 
 # Run tests
 script:
-  - nosetests -v --rednose test
+  - nosetests -v --rednose --with-coverage --cover-package=respec test/formula
+  - nosetests -v --rednose --with-coverage --cover-package=respec test/spec
 # after_success:
 #   - coveralls
