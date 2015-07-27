@@ -1,7 +1,8 @@
 # ReSpeC: Reactive Specification Compiler
 
 [![Build Status][build_img]][travis]
-[![Coverage Status][coverage]][coveralls]
+[![Coverage Status][cover_img]][coveralls]
+[![Documentation Status][docs_img]][docs]
 
 ## About
 
@@ -14,7 +15,7 @@ ReSpeC (`respec`) is a Python framework for composing reactive Linear Temporal L
 - It does not synthesize a robot controller (finite-state machine). However, its output can be readily used with the [`slugs`](https://github.com/LTLMoP/slugs) GR(1) synthesizer. Also see [`gr1c`](https://github.com/slivingston/gr1c) and [`openpromela`](https://github.com/johnyf/openpromela).
 
 ### Maintainers:
-- Spyros Maniatopoulos <sm2296@cornell.edu>
+- Spyros Maniatopoulos ([@spmaniato](https://github.com/spmaniato), sm2296@cornell.edu)
 
 ## Examples
 coming soon!
@@ -27,5 +28,7 @@ coming soon!
 
 [build_img]: https://travis-ci.org/LTLMoP/ReSpeC.svg?branch=master
 [travis]: https://travis-ci.org/LTLMoP/ReSpeC
-[coverage]: https://coveralls.io/repos/LTLMoP/ReSpeC/badge.svg?branch=master
+[cover_img]: https://coveralls.io/repos/LTLMoP/ReSpeC/badge.svg?branch=master&service=github
 [coveralls]: https://coveralls.io/r/LTLMoP/ReSpeC?branch=master
+[docs_img]: https://readthedocs.org/projects/ReSpeC/badge/?version=latest
+[docs]: https://readthedocs.org/projects/ReSpeC/?badge=latest
