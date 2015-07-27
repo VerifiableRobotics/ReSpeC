@@ -8,6 +8,8 @@
 
 ReSpeC (`respec`) is a Python framework for composing reactive Linear Temporal Logic (LTL) specifications for use in the synthesis of high-level robot controllers.
 
+ReSpeC is used as the specification compiler in [Team ViGIR](http://www.teamvigir.org/)'s [`Behavior Synthesis`](https://github.com/team-vigir/vigir_behavior_synthesis) ROS stack.
+
 ### What ReSpeC is NOT meant for:
 - It is not an executive for high-level robot control. For that, see [`LTLMoP`](https://github.com/LTLMoP/LTLMoP), [`SMACH`](http://wiki.ros.org/smach), and [`FlexBE`](https://github.com/team-vigir/flexbe_behavior_engine).
 - It is not a structured or natural language parser for robotics. For that, see [`LTLMoP`](https://github.com/LTLMoP/LTLMoP) and [`SLURP`](https://github.com/PennNLP/SLURP).
@@ -29,6 +31,6 @@ coming soon!
 [build_img]: https://travis-ci.org/LTLMoP/ReSpeC.svg?branch=master
 [travis]: https://travis-ci.org/LTLMoP/ReSpeC
 [cover_img]: https://coveralls.io/repos/LTLMoP/ReSpeC/badge.svg?branch=master&service=github
-[coveralls]: https://coveralls.io/r/LTLMoP/ReSpeC?branch=master
+[coveralls]: https://coveralls.io/github/LTLMoP/ReSpeC?branch=master
 [docs_img]: https://readthedocs.org/projects/ReSpeC/badge/?version=latest
 [docs]: https://readthedocs.org/projects/ReSpeC/?badge=latest
