@@ -2,8 +2,7 @@
 
 import os
 
-from respec.spec.gr1_specification import GR1Specification
-from respec.formula.gr1_formulas import GR1Formula, FastSlowFormula
+from respec.formula import GR1Formula
 
 import unittest
 

@@ -4,7 +4,7 @@ import os
 
 import unittest
 
-from respec.spec.gr1_specification import *
+from respec.spec import GR1Specification
 
 class SpecificationTests(unittest.TestCase):
 
