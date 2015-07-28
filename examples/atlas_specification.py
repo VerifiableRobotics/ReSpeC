@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from spec import *
+from respec.spec import *
 
 """
 The module defines the components that make up a LTL specification for ATLAS.
@@ -94,7 +94,7 @@ def main(): #pragma: no cover
     
     import pprint
     
-    specification = CompleteSpecification('test', ['stand'], ['grasp'])
+    specification = CompleteSpecification('atlas_example', ['stand'], ['grasp'])
     
     print "[INPUT]"
     pprint.pprint(specification.env_props)
