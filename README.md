@@ -20,7 +20,11 @@ ReSpeC is used as the specification compiler in [Team ViGIR](http://www.teamvigi
 - Spyros Maniatopoulos ([@spmaniato](https://github.com/spmaniato), sm2296@cornell.edu)
 
 ## Examples
-coming soon!
+* Run `python examples/atlas_specification.py`. You will see LTL terminal output.
+* More examples of both individual formulas and full specifications coming soon!
+
+## Documentation
+[Read the Docs](http://respec.readthedocs.org/en/latest/) coming soon!
 
 ## Publications
 coming soon!
@@ -32,5 +36,5 @@ coming soon!
 [travis]: https://travis-ci.org/LTLMoP/ReSpeC
 [cover_img]: https://coveralls.io/repos/LTLMoP/ReSpeC/badge.svg?branch=master&service=github
 [coveralls]: https://coveralls.io/github/LTLMoP/ReSpeC?branch=master
-[docs_img]: https://readthedocs.org/projects/ReSpeC/badge/?version=latest
-[docs]: https://readthedocs.org/projects/ReSpeC/?badge=latest
+[docs_img]: https://readthedocs.org/projects/respec/badge/?version=latest
+[docs]: https://readthedocs.org/projects/respec/?badge=latest
