@@ -635,7 +635,7 @@ class SuccessfulOutcomeFormula(ActivationOutcomesFormula):
     machine once all of the conditions have been met.
     """
 
-    def __init__(self, conditions, success = 'finished'):
+    def __init__(self, conditions, success = 'finished', strict_order = False):
         super(SuccessfulOutcomeFormula, self).__init__(sys_props = conditions)
 
         memory_props = list()
@@ -648,6 +648,10 @@ class SuccessfulOutcomeFormula(ActivationOutcomesFormula):
             memory_formula = self._gen_memory_formulas(mem_prop = memory_prop, 
                                                        goal = successful_outcome)
             self.formulas.extend(memory_formula)
+
+        if strict_order:
+            order_formulas = self._gen_goal_ordering_formulas(memory_props)
+            self.formulas.extend(order_formulas)
 
         self.sys_props.append(success)
 
@@ -673,6 +677,20 @@ class SuccessfulOutcomeFormula(ActivationOutcomesFormula):
                                 guard_formula]
 
         return goal_memory_formulas
+
+    def _gen_goal_ordering_formulas(self, memory_props):
+        '''...'''
+
+        strict_goal_order_formulas = list()
+
+        for i in range(1, len(memory_props)):
+
+            left_hand_side = LTL.neg(memory_props[i-1])
+            right_hand_side = LTL.next(LTL.neg((memory_props[i])))
+            memory_pair = LTL.implication(left_hand_side, right_hand_side)
+            strict_goal_order_formulas.append(memory_pair)
+
+        return strict_goal_order_formulas
 
     def _gen_memory_prop(self, prop):
         '''

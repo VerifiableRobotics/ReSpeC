@@ -63,6 +63,19 @@ class SpecificationConstructionTests(unittest.TestCase):
         self.assertItemsEqual(actual_seq = self.spec.sys_liveness,
                               expected_seq = ['(finished | failed)'])
 
+    def test_handle_strict_goal_order(self):
+        
+        goals = ['dance', 'sleep', 'swim']
+        self.spec.handle_single_liveness(goals = goals,
+                                         outcomes = ['finished'],
+                                         strict_order = True)
+
+        expected_formula_1 = '! dance_m -> next(! sleep_m)'
+        expected_formula_2 = '! sleep_m -> next(! swim_m)'
+
+        self.assertIn(expected_formula_1, self.spec.sys_trans)
+        self.assertIn(expected_formula_2, self.spec.sys_trans)
+
     def test_unsupported_outcomes_raise_exception(self):
         
         goal = 'dance'

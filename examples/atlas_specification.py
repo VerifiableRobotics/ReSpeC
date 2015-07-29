@@ -23,7 +23,8 @@ class CompleteSpecification(GR1Specification):
     
     def __init__(self, name, initial_conditions, goals,
                  action_outcomes = ['completed', 'failed'],
-                 sm_outcomes = [SM_OUTCOME_SUCCESS, SM_OUTCOME_FAILURE]):
+                 sm_outcomes = [SM_OUTCOME_SUCCESS, SM_OUTCOME_FAILURE],
+                 strict_order = True):
         
         super(CompleteSpecification, self).__init__(spec_name = name,
                                                     env_props = [],
@@ -56,7 +57,8 @@ class CompleteSpecification(GR1Specification):
         # Generate LTL specification governing the achievement of goals ...
         goal_spec = GoalSpecification()
         goal_spec.handle_single_liveness(goals = goals,
-                                         outcomes = sm_outcomes)
+                                         outcomes = sm_outcomes,
+                                         strict_order = strict_order)
         
         if SM_OUTCOME_FAILURE in sm_outcomes:
             # Add LTL formula tying all the things that can fail to SM outcome

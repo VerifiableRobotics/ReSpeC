@@ -455,6 +455,17 @@ class GoalFormulaGenerationTests(unittest.TestCase):
 
         self.assertItemsEqual(expected_formulas, formula.formulas)
 
+    def test_strict_goal_ordering(self):
+
+        formula = SuccessfulOutcomeFormula(conditions = ['dance', 'sleep', 'swim'],
+                                           success = 'finished', strict_order = True)
+        
+        expected_formula_1 = '! dance_m -> next(! sleep_m)'
+        expected_formula_2 = '! sleep_m -> next(! swim_m)'
+
+        self.assertIn(expected_formula_1, formula.formulas)
+        self.assertIn(expected_formula_2, formula.formulas)
+
     def test_failed_outcome_formula(self):
 
         formula = FailedOutcomeFormula(conditions = ['dance', 'sleep'],

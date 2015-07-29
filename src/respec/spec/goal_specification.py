@@ -19,7 +19,8 @@ class GoalSpecification(GR1Specification):
                                                 env_props = [],
                                                 sys_props = [])
 
-    def handle_single_liveness(self, goals, outcomes = ['finished']):
+    def handle_single_liveness(self, goals,
+                               outcomes = ['finished'], strict_order = False):
         """
         Create a single system liveness requirement (e.g. []<> finished) 
         from one or more goals. The method also generates the necessary 
@@ -35,7 +36,8 @@ class GoalSpecification(GR1Specification):
             liveness_formula = SystemLivenessFormula(goals = outcomes,
                                                      disjunction = True)
             success_formula = SuccessfulOutcomeFormula(conditions = goals,
-                                                       success = outcomes[0])     
+                                                       success = outcomes[0],
+                                                       strict_order = strict_order)
             goal_formulas.extend([liveness_formula, success_formula])
         
         if len(outcomes) > 2:
