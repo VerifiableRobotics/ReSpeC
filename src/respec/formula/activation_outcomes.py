@@ -393,7 +393,7 @@ class TransitionRelationFormula(ActivationOutcomesFormula):
 
         sys_trans_formulas = list()
         for prop in ts.keys():
-            left_hand_side = _get_com_prop(prop)
+            left_hand_side = LTL.next(_get_com_prop(prop))
             right_hand_side = list()
             
             for adj_prop in ts[prop]:

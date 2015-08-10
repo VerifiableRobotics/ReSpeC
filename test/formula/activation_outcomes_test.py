@@ -270,15 +270,15 @@ class TSFormulaGenerationTests(unittest.TestCase):
 
         self.assertEqual('sys_trans', formula.type)
 
-        expected_formula_1 = 'r1_c -> (next(r1_a & ! r2_a & ! r3_a) | ' + \
-                                      'next(r2_a & ! r1_a & ! r3_a) | ' + \
-                                      'next(r3_a & ! r1_a & ! r2_a) | ' + \
-                                      'next(! r1_a & ! r2_a & ! r3_a))'
-        expected_formula_2 = 'r2_c -> (next(r2_a & ! r1_a & ! r3_a) | ' + \
-                                      'next(! r1_a & ! r2_a & ! r3_a))'
-        expected_formula_3 = 'r3_c -> (next(r3_a & ! r1_a & ! r2_a) | ' + \
-                                      'next(r1_a & ! r2_a & ! r3_a) | ' + \
-                                      'next(! r1_a & ! r2_a & ! r3_a))'
+        expected_formula_1 = 'next(r1_c) -> (next(r1_a & ! r2_a & ! r3_a) | ' + \
+                                            'next(r2_a & ! r1_a & ! r3_a) | ' + \
+                                            'next(r3_a & ! r1_a & ! r2_a) | ' + \
+                                            'next(! r1_a & ! r2_a & ! r3_a))'
+        expected_formula_2 = 'next(r2_c) -> (next(r2_a & ! r1_a & ! r3_a) | ' + \
+                                            'next(! r1_a & ! r2_a & ! r3_a))'
+        expected_formula_3 = 'next(r3_c) -> (next(r3_a & ! r1_a & ! r2_a) | ' + \
+                                            'next(r1_a & ! r2_a & ! r3_a) | ' + \
+                                            'next(! r1_a & ! r2_a & ! r3_a))'
 
         expected_formulas = [expected_formula_1, expected_formula_2, expected_formula_3]
 
