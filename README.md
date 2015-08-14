@@ -1,4 +1,4 @@
-# ReSpeC: Reactive Specification Compiler
+# Reactive Specification Construction kit
 
 [![Build Status][build_img]][travis]
 [![Coverage Status][cover_img]][coveralls]
@@ -6,9 +6,9 @@
 
 ## About
 
-ReSpeC (`respec`) is a Python framework for composing reactive Linear Temporal Logic (LTL) specifications for use in the synthesis of high-level robot controllers.
+ReSpeC (`respec`) is a Python framework for constructing Linear Temporal Logic (LTL) formulas and composing reactive LTL specifications for use in the synthesis of high-level robot controllers (aka reactive mission plans).
 
-ReSpeC is used as the specification compiler in [Team ViGIR](http://www.teamvigir.org/)'s [`Behavior Synthesis`](https://github.com/team-vigir/vigir_behavior_synthesis) ROS stack.
+ReSpeC is used in [Team ViGIR](http://www.teamvigir.org/)'s [Behavior Synthesis](https://github.com/team-vigir/vigir_behavior_synthesis) ROS stack to generate LTL specifications.
 
 ### What ReSpeC is NOT meant for:
 - It is not an executive for high-level robot control. For that, see [`LTLMoP`](https://github.com/VerifiableRobotics/LTLMoP), [`SMACH`](http://wiki.ros.org/smach), and [`FlexBE`](https://github.com/team-vigir/flexbe_behavior_engine).
