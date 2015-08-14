@@ -1,8 +1,5 @@
+# ReSpeC [![Build Status][build_img]][travis] [![Coverage Status][cover_img]][coveralls] [![Documentation Status][docs_img]][docs]
 # Reactive Specification Construction kit
-
-[![Build Status][build_img]][travis]
-[![Coverage Status][cover_img]][coveralls]
-[![Documentation Status][docs_img]][docs]
 
 ## About
 
