@@ -96,15 +96,15 @@ class SpecificationConstructionTests(unittest.TestCase):
 
     def test_formulas_in_sys_trans(self):
 
-        expected_formula_1 = 'r1_c -> (next(r1_a & ! r2_a & ! r3_a) | ' + \
-                                      'next(r2_a & ! r1_a & ! r3_a) | ' + \
-                                      'next(r3_a & ! r1_a & ! r2_a) | ' + \
-                                      'next(! r1_a & ! r2_a & ! r3_a))'
-        expected_formula_2 = 'r2_c -> (next(r2_a & ! r1_a & ! r3_a) | ' + \
-                                      'next(! r1_a & ! r2_a & ! r3_a))'
-        expected_formula_3 = 'r3_c -> (next(r3_a & ! r1_a & ! r2_a) | ' + \
-                                      'next(r1_a & ! r2_a & ! r3_a) | ' + \
-                                      'next(! r1_a & ! r2_a & ! r3_a))'
+        expected_formula_1 = 'next(r1_c) -> (next(r1_a & ! r2_a & ! r3_a) | ' + \
+                                            'next(r2_a & ! r1_a & ! r3_a) | ' + \
+                                            'next(r3_a & ! r1_a & ! r2_a) | ' + \
+                                            'next(! r1_a & ! r2_a & ! r3_a))'
+        expected_formula_2 = 'next(r2_c) -> (next(r2_a & ! r1_a & ! r3_a) | ' + \
+                                            'next(! r1_a & ! r2_a & ! r3_a))'
+        expected_formula_3 = 'next(r3_c) -> (next(r3_a & ! r1_a & ! r2_a) | ' + \
+                                            'next(r1_a & ! r2_a & ! r3_a) | ' + \
+                                            'next(! r1_a & ! r2_a & ! r3_a))'
 
         expected_formula_4a = '(r1_a & (next(r1_c) | next(r1_f))) -> next(! r1_a)'
         expected_formula_4b = '(r2_a & (next(r2_c) | next(r2_f))) -> next(! r2_a)'
