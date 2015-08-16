@@ -609,20 +609,17 @@ class TopologyFairnessConditionsFormula(ActivationOutcomesFormula):
 
 class SystemLivenessFormula(ActivationOutcomesFormula):
     """
-    ...
+    #TODO: Move to gr1_formulas
     """
 
     def __init__(self, goals, disjunction = False):
         super(SystemLivenessFormula, self).__init__(sys_props = [])
 
-        #TODO: Add methods and input arg for also handling disjunction
-        # It's necessary for handling failure: []<> (finished | failed)
         self.formulas = self._gen_liveness_formula(goals, disjunction)
 
         self.type = 'sys_liveness'
 
     def _gen_liveness_formula(self, goals, disjunction):
-        #TODO: Move to gr1_formulas [?]
         
         liveness_formula = LTL.disj(goals) if disjunction else LTL.conj(goals)
 
@@ -818,28 +815,7 @@ def _is_activation(prop):
 
 def main(): #pragma: no cover
     
-    formulas  = list()
-    sys_props = ['dance', 'sleep']
-    outcomes  = ['completed', 'failed', 'preempted']
-
-    ts = {'r1' : ['r2'], 'r2': ['r1']}
-
-    formulas.append(OutcomeMutexFormula(sys_props, outcomes))
-
-    formulas.append(ActionOutcomeConstraintsFormula(sys_props, outcomes))
-
-    formulas.append(PropositionDeactivationFormula(sys_props, outcomes))
-
-    formulas.append(ActionFairnessConditionsFormula(sys_props, outcomes))
-
-    for formula in formulas:
-        print '---'
-        print 'Formula Class:\t',   formula.__class__.__name__ # prints class name
-        print 'GR(1) Type:\t',      formula.type
-        print 'System props:\t',    formula.sys_props
-        print 'Env props:\t',       formula.env_props
-        print 'Outcomes:\t',        formula.outcome_props
-        print 'Formula(s):\t',      formula.formulas
+    pass
 
 if __name__ == "__main__": #pragma: no cover
     main()
