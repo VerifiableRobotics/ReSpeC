@@ -6,6 +6,7 @@ python:
 # Install packages
 install:
   # nose is pre-installed on Travis CI
+  - pip install pyyaml
   - pip install nose-cov
   - pip install rednose
   - pip install coveralls
