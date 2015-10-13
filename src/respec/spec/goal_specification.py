@@ -7,6 +7,8 @@ from ..formula import *
 Module's docstring #TODO
 """
 
+SM_OUTCOME_SUCCESS = 'finished'
+SM_OUTCOME_FAILURE = 'failed'
 
 class GoalSpecification(GR1Specification):
     """
@@ -32,16 +34,29 @@ class GoalSpecification(GR1Specification):
         #TODO: Refactor the hacky handling of outcomes below
         if len(outcomes) == 0:
             raise NotImplementedError('Cannot handle zero outcomes yet!') #FIX
-        else: # Assumes that the first outcome is success
-            liveness_formula = SystemLivenessFormula(goals = outcomes,
-                                                     disjunction = True)
-            success_formula = SuccessfulOutcomeFormula(conditions = goals,
-                                                       success = outcomes[0],
-                                                       strict_order = strict_order)
-            goal_formulas.extend([liveness_formula, success_formula])
-        
-        if len(outcomes) > 2:
+        elif len(outcomes) > 2:
             raise NotImplementedError('Only success and failure are supported!')
+        
+        elif len(outcomes) == 1 and outcomes[0] == SM_OUTCOME_FAILURE:
+            
+            for goal in goals:
+                liveness_formula = SimpleLivenessRequirementActOutFormula(
+                                                goal = goal,
+                                                sm_outcome = SM_OUTCOME_FAILURE)
+                goal_formulas.append(liveness_formula)
+        
+        # elif len(outcomes) == 1 and outcomes[0] == SM_OUTCOME_SUCCESS:
+        
+        else:
+            liveness_formula = SimpleLivenessRequirementFormula(
+                                                goals = outcomes,
+                                                disjunction = True)
+            success_formula = SuccessfulOutcomeFormula(
+                                                conditions = goals,
+                                                success = SM_OUTCOME_SUCCESS,
+                                                strict_order = strict_order)
+            goal_formulas.extend([liveness_formula, success_formula])
+                
 
         # Finally, load the formulas (and props) into the GR1 Specification
         self.load_formulas(goal_formulas)
@@ -55,3 +70,16 @@ class GoalSpecification(GR1Specification):
         failure_formula = FailedOutcomeFormula(conditions, failure)
 
         self.load(failure_formula)
+
+    def handle_retry_after_failure(self, failures):
+        
+        # retry_formula = RetryAfterFailureFormula(failures = failures)
+
+        # eventual_completion_formula = ActivationEventuallyCompletesFormula(
+        #                                                     actions = failures)
+
+        eventual_completion_formula = ActionFairnessConditionsFormula(
+                                                    actions = failures,
+                                                    outcomes = ['completed'])
+
+        self.load_formulas([eventual_completion_formula])

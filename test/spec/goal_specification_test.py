@@ -23,19 +23,30 @@ class SpecificationConstructionTests(unittest.TestCase):
 
         self.assertEqual(self.spec_name, self.spec.spec_name)
 
+    def test_too_many_outcomes_raises_exception(self):
+        
+        goal = 'dance'
+
+        self.assertRaises(NotImplementedError, self.spec.handle_single_liveness,
+                                               goals = [goal], outcomes = []) #0
+
+        too_many_outcomes = ['finished', 'failed', 'thats_too_much'] # >2
+
+        self.assertRaises(NotImplementedError, self.spec.handle_single_liveness,
+                                               goals = [goal],
+                                               outcomes = too_many_outcomes)
+
     def test_handle_single_goal(self):
         
         goal = 'dance'
         self.spec.handle_single_liveness(goals = [goal])
 
-        expected_formula_0 = 'next(dance_c) -> next(dance_m)'
-        expected_formula_1 = 'dance_m -> next(dance_m)'
-        expected_formula_2 = '(! dance_m & next(! dance_c)) -> next(! dance_m)'
-        expected_formula_3 = 'finished <-> dance_m'
+        expected_formula_1 = '((dance_a & next(dance_c)) | dance_m) <-> next(dance_m)'
+        expected_formula_2 = 'finished <-> dance_m'
 
         self.assertItemsEqual(actual_seq = self.spec.sys_trans,
-                              expected_seq = [expected_formula_0, expected_formula_1,
-                                              expected_formula_2, expected_formula_3])
+                              expected_seq = [expected_formula_1,
+                                              expected_formula_2])
         self.assertItemsEqual(actual_seq = self.spec.sys_liveness,
                               expected_seq = ['finished'])
 
@@ -48,17 +59,14 @@ class SpecificationConstructionTests(unittest.TestCase):
                                      failure = 'failed')
 
 
-        expected_formula_0 = 'next(dance_c) -> next(dance_m)'
-        expected_formula_1 = 'dance_m -> next(dance_m)'
-        expected_formula_2 = '(! dance_m & next(! dance_c)) -> next(! dance_m)'
+        expected_formula_1 = '((dance_a & next(dance_c)) | dance_m) <-> next(dance_m)'
         
-        expected_formula_3 = 'finished <-> dance_m'
-        expected_formula_4 = 'next(failed) <-> (next(dance_f) | failed)'
+        expected_formula_2 = 'finished <-> dance_m'
+        expected_formula_3 = 'next(failed) <-> (next(dance_f) | failed)'
 
         self.assertItemsEqual(actual_seq = self.spec.sys_trans,
-                              expected_seq = [expected_formula_0, expected_formula_1,
-                                              expected_formula_2, expected_formula_3,
-                                              expected_formula_4])
+                              expected_seq = [expected_formula_1,
+                                              expected_formula_2, expected_formula_3])
 
         self.assertItemsEqual(actual_seq = self.spec.sys_liveness,
                               expected_seq = ['(finished | failed)'])
@@ -70,21 +78,38 @@ class SpecificationConstructionTests(unittest.TestCase):
                                          outcomes = ['finished'],
                                          strict_order = True)
 
-        expected_formula_1 = '! dance_m -> next(! sleep_m)'
-        expected_formula_2 = '! sleep_m -> next(! swim_m)'
+        expected_formula_1 = '((dance_a & next(dance_c)) | dance_m) <-> next(dance_m)'
+        expected_formula_2 = '(((sleep_a & next(sleep_c)) & dance_m) | sleep_m) <-> next(sleep_m)'
+        expected_formula_3 = '(((swim_a & next(swim_c)) & sleep_m) | swim_m) <-> next(swim_m)'
 
-        self.assertIn(expected_formula_1, self.spec.sys_trans)
-        self.assertIn(expected_formula_2, self.spec.sys_trans)
+        expected_formula_4 = 'finished <-> (dance_m & sleep_m & swim_m)'
 
-    def test_unsupported_outcomes_raise_exception(self):
+        self.assertItemsEqual(actual_seq = self.spec.sys_trans,
+                              expected_seq = [expected_formula_1, expected_formula_2,
+                                              expected_formula_3, expected_formula_4])
+
+    def test_liveness_requirement_when_only_failed_sm_outcome(self):
         
-        goal = 'dance'
+        goals = goals = ['dance', 'sleep']
+        self.spec.handle_single_liveness(goals = goals,
+                                         outcomes = ['failed'])
 
-        self.assertRaises(NotImplementedError, self.spec.handle_single_liveness,
-                                               goals = [goal], outcomes = []) #0
+        expected_formula_1 = '((dance_a & next(dance_c)) | failed)'
+        expected_formula_2 = '((sleep_a & next(sleep_c)) | failed)'
 
-        too_many_outcomes = ['finished', 'failed', 'thats_too_much'] # >2
+        self.assertItemsEqual(actual_seq = self.spec.sys_liveness,
+                              expected_seq = [expected_formula_1,
+                                              expected_formula_2])
 
-        self.assertRaises(NotImplementedError, self.spec.handle_single_liveness,
-                                               goals = [goal],
-                                               outcomes = too_many_outcomes)
+    def test_handling_of_livenesses_when_retring_after_failure(self):
+
+        goals = goals = ['dance', 'sleep']
+        self.spec.handle_retry_after_failure(failures = goals)
+
+        expected_formula_3 = '((dance_a & next(dance_c)) | ! dance_a)'
+        expected_formula_4 = '((sleep_a & next(sleep_c)) | ! sleep_a)'
+
+        self.assertIn(member = expected_formula_3,
+                      container = self.spec.env_liveness)
+        self.assertIn(member = expected_formula_4,
+                      container = self.spec.env_liveness)

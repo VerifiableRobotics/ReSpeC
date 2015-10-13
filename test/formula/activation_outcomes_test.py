@@ -117,12 +117,13 @@ class ActionFormulaGenerationTests(unittest.TestCase):
 
         self.assertEqual('env_trans', formula.type)
 
-        expected_formula_1 = '((dance_c | dance_f) & dance_a) -> (next(dance_c) | next(dance_f))'
+        # expected_formula_1 = '((dance_c | dance_f) & dance_a) -> (next(dance_c) | next(dance_f))'
         expected_formula_2a = '(! dance_c & ! dance_a) -> next(! dance_c)'
         expected_formula_2b = '(! dance_f & ! dance_a) -> next(! dance_f)'
 
-        expected_formulas = [expected_formula_1,
-                             expected_formula_2a, expected_formula_2b]
+        # expected_formulas = [expected_formula_1,
+        #                      expected_formula_2a, expected_formula_2b]
+        expected_formulas = [expected_formula_2a, expected_formula_2b]
 
         self.assertItemsEqual(expected_formulas, formula.formulas)
 
@@ -148,18 +149,21 @@ class ActionFormulaGenerationTests(unittest.TestCase):
                                     outcomes = ['completed', 'failed'])
 
         expected_formula_1a = '(dance_a & (next(dance_c) | next(dance_f)))' # outcome
-        expected_formula_1b = '(! dance_a & (next(! dance_c) & next(! dance_f)))' # deactivation ??
-        expected_formula_1c = '(! dance_a & (next(dance_c) | next(dance_f)))' # persistence
-        expected_formula_1  = '(' + expected_formula_1a + ' | ' + \
-                                 expected_formula_1b + ' | ' + \
-                                 expected_formula_1c + ')'
-        expected_formula_2a = '(dance_a & next(! dance_a))'
-        expected_formula_2b = '(! dance_a & next(dance_a))' # change
-        expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
-                                 expected_formula_2b + ')'
+        # expected_formula_1b = '(! dance_a & (next(! dance_c) & next(! dance_f)))' # deactivation ??
+        # expected_formula_1c = '(! dance_a & (next(dance_c) | next(dance_f)))' # persistence
+        # expected_formula_1  = '(' + expected_formula_1a + ' | ' + \
+        #                          expected_formula_1b + ' | ' + \
+        #                          expected_formula_1c + ')'
+        # expected_formula_2a = '(dance_a & next(! dance_a))'
+        # expected_formula_2b = '(! dance_a & next(dance_a))' # change
+        # expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
+        #                          expected_formula_2b + ')'
         
-        expected_formula = '(' + expected_formula_1 + ' | ' + \
-                                 expected_formula_2 + ')'
+        # expected_formula = '(' + expected_formula_1 + ' | ' + \
+        #                          expected_formula_2 + ')'
+
+        expected_formula = '(' + expected_formula_1a + ' | ' + \
+                                 '! dance_a' + ')'
 
         self.assertItemsEqual([expected_formula], formula.formulas)
 
@@ -369,17 +373,19 @@ class TSFormulaGenerationTests(unittest.TestCase):
                                     expected_formula_1b + ' | ' + \
                                     expected_formula_1c + ')' # completion
         
-        expected_formula_2a = '((r1_a & ! r2_a & ! r3_a) & ! next(r1_a & ! r2_a & ! r3_a))'
-        expected_formula_2b = '((r2_a & ! r1_a & ! r3_a) & ! next(r2_a & ! r1_a & ! r3_a))'
-        expected_formula_2c = '((r3_a & ! r1_a & ! r2_a) & ! next(r3_a & ! r1_a & ! r2_a))'
-        expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
-                                    expected_formula_2b + ' | ' + \
-                                    expected_formula_2c + ')' # change
+        # expected_formula_2a = '((r1_a & ! r2_a & ! r3_a) & ! next(r1_a & ! r2_a & ! r3_a))'
+        # expected_formula_2b = '((r2_a & ! r1_a & ! r3_a) & ! next(r2_a & ! r1_a & ! r3_a))'
+        # expected_formula_2c = '((r3_a & ! r1_a & ! r2_a) & ! next(r3_a & ! r1_a & ! r2_a))'
+        # expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
+        #                             expected_formula_2b + ' | ' + \
+        #                             expected_formula_2c + ')' # change
         
         expected_formula_3 = '(! r1_a & ! r2_a & ! r3_a)' # activate nothing
 
+        # expected_formula = '(' + expected_formula_1 + ' | ' + \
+        #                          expected_formula_2 + ' | ' + \
+        #                          expected_formula_3 + ')'
         expected_formula = '(' + expected_formula_1 + ' | ' + \
-                                 expected_formula_2 + ' | ' + \
                                  expected_formula_3 + ')'
 
         self.assertItemsEqual([expected_formula], formula.formulas)
@@ -401,17 +407,19 @@ class TSFormulaGenerationTests(unittest.TestCase):
                                     expected_formula_1b + ' | ' + \
                                     expected_formula_1c + ')' # completion
         
-        expected_formula_2a = '((r1_a & ! r2_a & ! r3_a) & ! next(r1_a & ! r2_a & ! r3_a))'
-        expected_formula_2b = '((r2_a & ! r1_a & ! r3_a) & ! next(r2_a & ! r1_a & ! r3_a))'
-        expected_formula_2c = '((r3_a & ! r1_a & ! r2_a) & ! next(r3_a & ! r1_a & ! r2_a))'
-        expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
-                                    expected_formula_2b + ' | ' + \
-                                    expected_formula_2c + ')' # change (same)
+        # expected_formula_2a = '((r1_a & ! r2_a & ! r3_a) & ! next(r1_a & ! r2_a & ! r3_a))'
+        # expected_formula_2b = '((r2_a & ! r1_a & ! r3_a) & ! next(r2_a & ! r1_a & ! r3_a))'
+        # expected_formula_2c = '((r3_a & ! r1_a & ! r2_a) & ! next(r3_a & ! r1_a & ! r2_a))'
+        # expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
+        #                             expected_formula_2b + ' | ' + \
+        #                             expected_formula_2c + ')' # change (same)
         
         expected_formula_3 = '(! r1_a & ! r2_a & ! r3_a)' # activate nothing
 
+        # expected_formula = '(' + expected_formula_1 + ' | ' + \
+        #                          expected_formula_2 + ' | ' + \
+        #                          expected_formula_3 + ')'
         expected_formula = '(' + expected_formula_1 + ' | ' + \
-                                 expected_formula_2 + ' | ' + \
                                  expected_formula_3 + ')'
 
         self.assertItemsEqual([expected_formula], formula.formulas)
@@ -442,16 +450,11 @@ class GoalFormulaGenerationTests(unittest.TestCase):
         self.assertItemsEqual(['dance_c', 'sleep_c'], formula.env_props)
 
         expected_formula_0 = 'finished <-> (dance_m & sleep_m)'
-        expected_formula_1 = 'next(dance_c) -> next(dance_m)'
-        expected_formula_2 = 'dance_m -> next(dance_m)'
-        expected_formula_3 = '(! dance_m & next(! dance_c)) -> next(! dance_m)'
-        expected_formula_4 = 'next(sleep_c) -> next(sleep_m)'
-        expected_formula_5 = 'sleep_m -> next(sleep_m)'
-        expected_formula_6 = '(! sleep_m & next(! sleep_c)) -> next(! sleep_m)'
+        expected_formula_1 = '((dance_a & next(dance_c)) | dance_m) <-> next(dance_m)'
+        expected_formula_2 = '((sleep_a & next(sleep_c)) | sleep_m) <-> next(sleep_m)'
 
         expected_formulas = [expected_formula_0, expected_formula_1,
-                             expected_formula_2, expected_formula_3,
-                             expected_formula_4, expected_formula_5, expected_formula_6]
+                             expected_formula_2]
 
         self.assertItemsEqual(expected_formulas, formula.formulas)
 
@@ -460,8 +463,9 @@ class GoalFormulaGenerationTests(unittest.TestCase):
         formula = SuccessfulOutcomeFormula(conditions = ['dance', 'sleep', 'swim'],
                                            success = 'finished', strict_order = True)
         
-        expected_formula_1 = '! dance_m -> next(! sleep_m)'
-        expected_formula_2 = '! sleep_m -> next(! swim_m)'
+        expected_formula_1 = '((dance_a & next(dance_c)) | dance_m) <-> next(dance_m)'
+        expected_formula_2 = '(((sleep_a & next(sleep_c)) & dance_m) | sleep_m) <-> next(sleep_m)'
+        expected_formula_3 = '(((swim_a & next(swim_c)) & sleep_m) | swim_m) <-> next(swim_m)'
 
         self.assertIn(expected_formula_1, formula.formulas)
         self.assertIn(expected_formula_2, formula.formulas)
@@ -483,30 +487,26 @@ class GoalFormulaGenerationTests(unittest.TestCase):
 
         self.assertItemsEqual([expected_formula], formula.formulas)
 
-    def test_system_liveness_formula_single_goal(self):
-
-        formula = SystemLivenessFormula(goals = ['finished'])
-
-        self.assertEqual('sys_liveness', formula.type)
-
-        self.assertItemsEqual(['finished'], formula.formulas)
-
-    def test_system_liveness_formula_conjunction(self):
-
-        formula = SystemLivenessFormula(goals = ['finished', '! failed'])
+    def test_simple_liveness_generated_with_completion_props(self):
+        
+        formula = SimpleLivenessRequirementActOutFormula(goal = 'dance',
+                                                         sm_outcome = 'failed')
 
         self.assertEqual('sys_liveness', formula.type)
 
-        self.assertItemsEqual(['(finished & ! failed)'], formula.formulas)
+        expected_formulas = ['((dance_a & next(dance_c)) | failed)']
 
-    def test_system_liveness_formula_disjunction(self):
+        self.assertItemsEqual(expected_formulas, formula.formulas)
 
-        formula = SystemLivenessFormula(goals = ['finished', 'failed'],
-                                        disjunction = True)
+    def test_system_liveness_retry_after_failure(self):
+        
+        formula = RetryAfterFailureFormula(failures = ['dance', 'sleep'])
 
         self.assertEqual('sys_liveness', formula.type)
 
-        self.assertItemsEqual(['(finished | failed)'], formula.formulas)
+        expected_formulas = ['dance_f -> dance_a', 'sleep_f -> sleep_a']
+
+        self.assertItemsEqual(expected_formulas, formula.formulas)
 
 
 class ICFormulaGenerationTests(unittest.TestCase):

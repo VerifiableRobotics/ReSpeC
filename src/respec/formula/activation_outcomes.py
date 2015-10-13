@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from ..ltl import ltl as LTL
-from gr1_formulas import GR1Formula
+from gr1_formulas import *
 
 """
 The activation-outcomes paradigm generalizes the activation-completion paradigm
@@ -195,7 +195,7 @@ class ActionOutcomeConstraintsFormula(ActivationOutcomesFormula):
     def _gen_action_outcomes_formulas(self):
         """Equivalent of Equations (3) and (4)"""
 
-        eq3_formulas = list()
+        # eq3_formulas = list()
         eq4_formulas = list()
 
         for pi in self.outcome_props.keys():
@@ -204,14 +204,14 @@ class ActionOutcomeConstraintsFormula(ActivationOutcomesFormula):
             pi_outcomes = self.outcome_props[pi]
 
             # Generate Eq. (3)
-            lhs_disjunct = LTL.disj(pi_outcomes)
-            left_hand_side = LTL.conj([lhs_disjunct, pi_a])
+            # lhs_disjunct = LTL.disj(pi_outcomes)
+            # left_hand_side = LTL.conj([lhs_disjunct, pi_a])
 
-            rhs_props = map(LTL.next, pi_outcomes)
-            right_hand_side = LTL.disj(rhs_props)
+            # rhs_props = map(LTL.next, pi_outcomes)
+            # right_hand_side = LTL.disj(rhs_props)
             
-            formula = LTL.implication(left_hand_side, right_hand_side)
-            eq3_formulas.append(formula)
+            # formula = LTL.implication(left_hand_side, right_hand_side)
+            # eq3_formulas.append(formula)
 
             # Generate Eq. (4)
             not_pi_a = LTL.neg(pi_a)
@@ -225,7 +225,8 @@ class ActionOutcomeConstraintsFormula(ActivationOutcomesFormula):
                 formula = LTL.implication(left_hand_side, right_hand_side)
                 eq4_formulas.append(formula)
 
-        return eq3_formulas + eq4_formulas
+        # return eq3_formulas + eq4_formulas
+        return eq4_formulas
 
 
 class ActionOutcomePersistenceFormula(ActivationOutcomesFormula):
@@ -332,17 +333,19 @@ class ActionFairnessConditionsFormula(ActivationOutcomesFormula):
             out_conjunct = LTL.conj(next_not_pi_outs)
             
             outcomes_disjunct_1 = LTL.conj([pi_a, out_disjunct])
-            outcomes_disjunct_2 = LTL.conj([not_pi_a, out_conjunct])
-            outcomes_disjunct_3 = LTL.conj([not_pi_a, out_disjunct])
-            outcomes_formula = LTL.disj([outcomes_disjunct_1,
-                                         outcomes_disjunct_2,
-                                         outcomes_disjunct_3])
+            # outcomes_disjunct_2 = LTL.conj([not_pi_a, out_conjunct])
+            # outcomes_disjunct_3 = LTL.conj([not_pi_a, out_disjunct])
+            # outcomes_formula = LTL.disj([outcomes_disjunct_1,
+            #                              outcomes_disjunct_2,
+            #                              outcomes_disjunct_3])
+            outcomes_formula = outcomes_disjunct_1
 
-            change_disjunt_1 = LTL.conj([pi_a, LTL.next(not_pi_a)])
-            change_disjunt_2 = LTL.conj([not_pi_a, LTL.next(pi_a)])
-            change_formula = LTL.disj([change_disjunt_1, change_disjunt_2])
+            # change_disjunt_1 = LTL.conj([pi_a, LTL.next(not_pi_a)])
+            # change_disjunt_2 = LTL.conj([not_pi_a, LTL.next(pi_a)])
+            # change_formula = LTL.disj([change_disjunt_1, change_disjunt_2])
+            # change_formula = change_disjunt_1
 
-            fairness_condition = LTL.disj([outcomes_formula, change_formula])
+            fairness_condition = LTL.disj([outcomes_formula, not_pi_a])
 
             fairness_formulas.append(fairness_condition)
 
@@ -597,7 +600,7 @@ class TopologyFairnessConditionsFormula(ActivationOutcomesFormula):
         change_formula = LTL.disj(change_terms)
         activate_nothing = _get_act_nothing(ts.keys())
         fairness_formula = LTL.disj([completion_formula,
-                                     change_formula,
+                                     # change_formula,
                                      activate_nothing])
 
         return [fairness_formula]
@@ -607,99 +610,89 @@ class TopologyFairnessConditionsFormula(ActivationOutcomesFormula):
 # System liveness requirements (including memory formulas)
 # =============================================================================
 
-class SystemLivenessFormula(ActivationOutcomesFormula):
-    """
-    #TODO: Move to gr1_formulas
-    """
+class SimpleLivenessRequirementActOutFormula(ActivationOutcomesFormula):
+    """..."""
 
-    def __init__(self, goals, disjunction = False):
-        super(SystemLivenessFormula, self).__init__(sys_props = [])
+    def __init__(self, goal, sm_outcome):
+        super(SimpleLivenessRequirementActOutFormula, self).__init__(
+                                                        sys_props = [goal])
 
-        self.formulas = self._gen_liveness_formula(goals, disjunction)
-
-        self.type = 'sys_liveness'
-
-    def _gen_liveness_formula(self, goals, disjunction):
+        goal_activation = _get_act_prop(goal)
+        goal_completion = LTL.next(_get_com_prop(goal))
+        goal_achievement = LTL.conj([goal_activation, goal_completion])
         
-        liveness_formula = LTL.disj(goals) if disjunction else LTL.conj(goals)
+        liveness_disjuncts = [goal_achievement, sm_outcome]
+        formula = SimpleLivenessRequirementFormula(liveness_disjuncts,
+                                                   disjunction = True)
 
-        return [liveness_formula]
+        self.formulas.extend(formula.formulas)
+        self.type = formula.type
 
 
 class SuccessfulOutcomeFormula(ActivationOutcomesFormula):
     """
     System requirement for activating the successful outcome of the state
-    machine once all of the conditions have been met.
+    machine (SM) once all of the conditions have been met.
     """
 
     def __init__(self, conditions, success = 'finished', strict_order = False):
         super(SuccessfulOutcomeFormula, self).__init__(sys_props = conditions)
-
-        memory_props = list()
-
-        for goal in conditions:
-            successful_outcome = _get_com_prop(goal) # Assume completion
-            memory_prop = self._gen_memory_prop(goal)
-            memory_props.append(memory_prop)
         
-            memory_formula = self._gen_memory_formulas(mem_prop = memory_prop, 
-                                                       goal = successful_outcome)
-            self.formulas.extend(memory_formula)
+        # Generate formulas for remembering achievement of conditions (goals)
+        memory_formulas = self._gen_memory_formulas(conditions, strict_order)
+        self.formulas.extend(memory_formulas)
 
-        if strict_order:
-            order_formulas = self._gen_goal_ordering_formulas(memory_props)
-            self.formulas.extend(order_formulas)
-
+        # Add memory props and the SM's successful outcome to the system props
+        memory_props = [_get_mem_prop(c) for c in conditions]
+        self.sys_props.extend(memory_props)
         self.sys_props.append(success)
 
+        # Generate formula for turning the SM's successful outcome "ON" (True)
         success_condition = self.gen_success_condition(memory_props, success)
-
         self.formulas.append(success_condition)
 
         self.type = 'sys_trans'
 
-    def _gen_memory_formulas(self, mem_prop, goal):
+    def _gen_memory_formulas(self, conditions, strict_order):
         '''
-        For a proposition corresponding to a desired objective, creates a memory
-        proposition and formulas for remembering achievement of that objective.
+        For propositions corresponding to desired objectives (conditions), 
+        creates memory formulas for remembering achievement of those objectives.
         '''
 
-        set_mem_formula = LTL.implication(LTL.next(goal), LTL.next(mem_prop))
-        remembrance_formula = LTL.implication(mem_prop, LTL.next(mem_prop))
-        precondition = LTL.conj([LTL.neg(mem_prop), LTL.next(LTL.neg(goal))])
-        guard_formula = LTL.implication(precondition, LTL.next(LTL.neg(mem_prop)))
+        goal_memory_formulas = list()
 
-        goal_memory_formulas = [set_mem_formula,
-                                remembrance_formula,
-                                guard_formula]
+        for i in range(len(conditions)):
+
+            goal = conditions[i] # Current goal, for which formula is generated
+            
+            activation = _get_act_prop(goal)
+            completion = _get_com_prop(goal) # Desired outcome = completion
+            curr_mem_prop = _get_mem_prop(goal)
+
+            goal_condition = LTL.conj([activation, LTL.next(completion)])
+
+            # Strict goal order logic:
+            if i == 0:
+                previous = None
+                prev_mem_prop = None
+            else:
+                previous = conditions[i-1]
+                prev_mem_prop = _get_mem_prop(previous)
+            
+            if strict_order and previous:
+                memory_condition = LTL.conj([goal_condition, prev_mem_prop])
+            else:
+                memory_condition = goal_condition
+            
+            # Put the formula together:
+            left_hand_side = LTL.disj([memory_condition, curr_mem_prop])
+            right_hand_side = LTL.next(curr_mem_prop)
+            memory_formula = LTL.iff(left_hand_side, right_hand_side)
+        
+            goal_memory_formulas.append(memory_formula)
 
         return goal_memory_formulas
 
-    def _gen_goal_ordering_formulas(self, memory_props):
-        '''...'''
-
-        strict_goal_order_formulas = list()
-
-        for i in range(1, len(memory_props)):
-
-            left_hand_side = LTL.neg(memory_props[i-1])
-            right_hand_side = LTL.next(LTL.neg((memory_props[i])))
-            memory_pair = LTL.implication(left_hand_side, right_hand_side)
-            strict_goal_order_formulas.append(memory_pair)
-
-        return strict_goal_order_formulas
-
-    def _gen_memory_prop(self, prop):
-        '''
-        Creates a memory proposition from the given proposition
-        and adds the memory proposition to the system propositions.
-        '''
-
-        mem_prop = prop + '_m'
-
-        self.sys_props.append(mem_prop)
-
-        return mem_prop
 
 class FailedOutcomeFormula(ActivationOutcomesFormula):
     """
@@ -728,6 +721,32 @@ class FailedOutcomeFormula(ActivationOutcomesFormula):
 
         return [failure_condition]
     
+
+class RetryAfterFailureFormula(ActivationOutcomesFormula):
+    """docstring for RetryAfterFailureFormula"""
+    
+    def __init__(self, failures, outcomes = ['failed']):
+        super(RetryAfterFailureFormula, self).__init__(sys_props = failures,
+                                                       outcomes = outcomes)
+        
+        self.formulas = self._gen_formulas(failures)
+
+        self.type = 'sys_liveness'
+
+    def _gen_formulas(self, failures):
+        
+        retry_formulas = list()
+
+        for action in failures:
+
+            failure = self.outcome_props[action][0]
+            activate = _get_act_prop(action)
+            retry_formula = LTL.implication(failure, activate)
+
+            retry_formulas.append(retry_formula)
+
+        return retry_formulas
+
 
 # =============================================================================
 # System and environment initial condition formulas
@@ -805,6 +824,10 @@ def _get_out_prop(prop, outcome):
         prop = prop[:-2]
     # Use first character of the outcome's name (string) as the subscript
     return prop + "_" + outcome[0]
+
+def _get_mem_prop(prop):
+    # Still necessary due to preconditions and topology formulas
+    return prop + "_m"
 
 def _is_activation(prop):
     return prop[-2:] == "_a"

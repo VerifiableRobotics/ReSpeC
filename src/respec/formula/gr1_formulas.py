@@ -248,6 +248,27 @@ class GR1Formula(object):
 			raise ValueError("Unknown type for proposition: %s" % prop)
 
 
+class SimpleLivenessRequirementFormula(GR1Formula):
+    """
+    Generates a single liveness requirement that's either a conjunction
+    or disjunction of the goals, depending on the flag. 
+    """
+
+    def __init__(self, goals, disjunction = False):
+        super(SimpleLivenessRequirementFormula, self).__init__(
+        												sys_props = goals)
+
+        self.formulas = self._gen_liveness_formula(goals, disjunction)
+
+        self.type = 'sys_liveness'
+
+    def _gen_liveness_formula(self, goals, disjunction):
+        
+        liveness_formula = LTL.disj(goals) if disjunction else LTL.conj(goals)
+
+        return [liveness_formula]
+
+
 # =========================================================
 # Entry point
 # =========================================================

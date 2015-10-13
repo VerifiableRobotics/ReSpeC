@@ -125,17 +125,19 @@ class SpecificationConstructionTests(unittest.TestCase):
                                     expected_formula_1b + ' | ' + \
                                     expected_formula_1c + ')' # completion
         
-        expected_formula_2a = '((r1_a & ! r2_a & ! r3_a) & ! next(r1_a & ! r2_a & ! r3_a))'
-        expected_formula_2b = '((r2_a & ! r1_a & ! r3_a) & ! next(r2_a & ! r1_a & ! r3_a))'
-        expected_formula_2c = '((r3_a & ! r1_a & ! r2_a) & ! next(r3_a & ! r1_a & ! r2_a))'
-        expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
-                                    expected_formula_2b + ' | ' + \
-                                    expected_formula_2c + ')' # change
+        # expected_formula_2a = '((r1_a & ! r2_a & ! r3_a) & ! next(r1_a & ! r2_a & ! r3_a))'
+        # expected_formula_2b = '((r2_a & ! r1_a & ! r3_a) & ! next(r2_a & ! r1_a & ! r3_a))'
+        # expected_formula_2c = '((r3_a & ! r1_a & ! r2_a) & ! next(r3_a & ! r1_a & ! r2_a))'
+        # expected_formula_2  = '(' + expected_formula_2a + ' | ' + \
+        #                             expected_formula_2b + ' | ' + \
+        #                             expected_formula_2c + ')' # change
         
         expected_formula_3 = '(! r1_a & ! r2_a & ! r3_a)' # activate nothing
 
+        # expected_env_liveness = '(' + expected_formula_1 + ' | ' + \
+        #                          expected_formula_2 + ' | ' + \
+        #                          expected_formula_3 + ')'
         expected_env_liveness = '(' + expected_formula_1 + ' | ' + \
-                                 expected_formula_2 + ' | ' + \
                                  expected_formula_3 + ')'
 
         self.assertItemsEqual(actual_seq = self.spec.env_liveness,
